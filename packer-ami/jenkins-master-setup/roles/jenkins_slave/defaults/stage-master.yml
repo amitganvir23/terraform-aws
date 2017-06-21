@@ -1,0 +1,6 @@
+masterip: "172.19.0.2"
+memory_Quota: 512
+index_Memory_Quota: 256
+db_user: admin
+db_pwd: password
+db_port: 8091

@@ -1,0 +1,7 @@
+---
+- hosts: 54.255.241.210
+#- hosts: tag_jenkins_master
+  remote_user: ec2-user
+  sudo: True
+  roles:
+        - jenkins_master

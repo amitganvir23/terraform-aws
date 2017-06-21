@@ -1,0 +1,10 @@
+- include_vars: ../couchbase_master/defaults/stage-master.yml
+
+## Configure Jenkins slave
+
+- name: Start and Enabled jenkins slave Service
+  service:
+    name: jenkins
+    state: started
+    enabled: yes
+
