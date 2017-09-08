@@ -1,0 +1,8 @@
+---
+- hosts: default
+  gather_facts: True
+  user: ec2-user
+  sudo: True
+
+  roles:
+        - jenkins_master

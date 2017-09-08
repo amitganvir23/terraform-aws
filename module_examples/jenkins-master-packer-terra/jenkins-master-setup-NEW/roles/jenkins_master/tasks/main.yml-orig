@@ -1,0 +1,125 @@
+- include_vars: ../jenkins_master/defaults/my_var.yml
+
+## Configure Jenkins master
+- name: Stop jenkins Master Service
+  service:
+    name: jenkins
+    state: stopped
+
+- name:  Checking jenkins master version
+  shell: "rpm -q jenkins-{{jenkins_version}}"
+  register: result1
+  ignore_errors: yes
+
+#- debug: msg="{{yum_stat_result.stdout_lines}}"
+#- debug: msg="Output:{{yum_stat.stdout}}"
+#- name: echo
+#  shell: "echo OUTPUT_AMIT:{{ result1.rc }}"
+
+- name: Remove jenkins version
+  yum:
+    name: "jenkins""
+    state: absent
+  register: result2
+  when:
+        - result1.rc == 1
+  #when: (result1.find('not installed') != -1)
+
+- name: Remove previous jenkins home data
+  file: 
+    path: "/var/lib/jenkins"
+    state: absent
+  when: ( result1.rc == 1 )
+#  when:
+#        - result2.rc == 0
+
+- name: Installing Jenkins Entered Veriosn
+  yum:
+    name: "jenkins-{{jenkins_version}}""
+    state: absent
+  when: ( result1.rc == 1 )
+
+- name: continue
+  shell: echo next
+
+
+- name: Assigning shell to jenkins user
+  user:
+    name: jenkins
+    shell: /bin/bash
+
+- file:
+    path: "{{ jenkins_home }}/.ssh"
+    mode: 0700
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    state: directory
+
+- name: Add user Public Key
+  copy: 
+     src: "../jenkins_master/files/jenkins_id_rsa.pub"
+     dest: "{{ jenkins_home }}/.ssh/id_rsa.pub"
+     mode: 0644
+     owner: "{{ username }}"
+     group: "{{ username }}"
+
+- name: Add user Private Key
+  copy: 
+     src: "../jenkins_master/files/jenkins_id_rsa"
+     dest: "{{ jenkins_home }}/.ssh/id_rsa"
+     mode: 0600
+     owner: "{{ username }}"
+     group: "{{ username }}"
+
+- name: Adding Bitbucket Public Key
+  copy: 
+     src: "../jenkins_master/files/bitbucket_pub"
+     dest: "{{ jenkins_home }}/.ssh/known_hosts"
+     mode: 0644
+     owner: "{{ username }}"
+     group: "{{ username }}"
+
+
+- name: Update and Pull new changes from repo
+  git:
+    repo: ssh://git@bitbucket.pearson.com/glpin/glp-jenkins-config-devops.git
+    dest: "{{ jenkins_bucket }}"
+    accept_hostkey: yes
+    key_file: /root/.ssh/id_rsa
+    #clone: no
+    force: yes
+
+- name: git config name
+  shell: git config --global user.name "{{ git_name }}" executable=/bin/bash
+  become: yes
+  become_user: "{{ username }}"
+
+- name: git config email
+  shell: git config --global user.email "{{ git_email }}" executable=/bin/bash
+  become: yes
+  become_user: "{{ username }}"
+
+- name: copying jobs and plugin from repo to jenkins home
+  shell: "cp -frv {{ jenkins_bucket }}/* /var/lib/jenkins/; cp -rvf /root/amit-plug/jenkins-plug/* /var/lib/jenkins/plugins ; chown  jenkins.jenkins -R /var/lib/jenkins/"
+  #shell: "cp -frv /root/amit-config/* /var/lib/jenkins/; cp -rvf /root/amit-plug/jenkins-plug/* /var/lib/jenkins/plugins ; chown  jenkins.jenkins -R /var/lib/jenkins/"
+
+
+#- debug: msg="{{item}}"
+#  with_items: "{{ jenkins_plugins }}"
+
+### // Add plugin name here my_var.yml to install on jenkins // ###
+- name: Get other plugins from net
+  get_url: 
+   url: "https://updates.jenkins-ci.org/latest/{{item}}"
+   dest: "{{  jenkins_home }}/plugins"
+  with_items: "{{ jenkins_plugins }}"
+#  with_items:
+#        - sonar.hpi
+#        - emailext-template.hpi
+
+- name: Start and Enabled jenkins Master Service
+  service:
+    name: jenkins
+#    state: started
+    enabled: yes
+

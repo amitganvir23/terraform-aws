@@ -1,0 +1,14 @@
+jenkins_home: /var/lib/jenkins
+jenkins_user_home: /home/jenkins
+
+jenkins_java_opts: "-Djenkins.install.runSetupWizard=false"
+
+git_name: "JenkinsMaster"
+git_email: "JenkinsMaster@pearson.com"
+
+## user name who is owner of jinkins home
+username: "jenkins"
+
+JAVA_HOME: /usr/java/jdk1.8.0_131
+M2_HOME: /home/jenkins/.m2/apache-maven-3.3.9
+AWS_SDK_LOAD_CONFIG: true

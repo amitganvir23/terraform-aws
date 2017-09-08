@@ -1,0 +1,25 @@
+jenkins_version: 2.65
+jenkins_home: /var/lib/jenkins
+jenkins_url: "http://127.0.0.1"
+jenkins_port: "8080"
+
+jenkins_java_opts: "-Djenkins.install.runSetupWizard=false"
+
+git_name: "JenkinsMaster"
+git_email: "JenkinsMaster@pearson.com"
+
+#jenkins_bucket: "/root/jenkins-config-bucket"
+jenkins_bucket: "/tmp/jenkins-config-bucket"
+jenkins_bucket_url: "ssh://git@bitbucket.pearson.com/glpin/glp-jenkins-config-devops.git"
+
+jenkins_plugin_bucket_url: "ssh://git@bitbucket.pearson.com/glpin/glp-infra-packer.git"
+jenkins_plugin_bucket: "/tmp/jenkins-plugin-bucket"
+
+## user name who is owner of jinkins home
+username: "jenkins"
+
+## // plgin name
+jenkins_plugins:
+ - sonar.hpi
+ - emailext-template.hpi
+
