@@ -1,0 +1,31 @@
+- include_vars: ../jenkins_slave/defaults/my_var.yml
+
+
+- file:
+    path: "{{ jenkins_home }}/nodes/{{slave_ip}}"
+    mode: 0755
+    recurse: yes
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    state: directory
+
+- name: Adding User Node config file
+  #copy: 
+     #src: "../jenkins_slave/files/config.xml"
+  template: 
+     src: "config.xml"
+     dest: "{{ jenkins_home }}/nodes/{{slave_ip}}"
+     mode: 0644
+     owner: "{{ username }}"
+     group: "{{ username }}"
+
+- name: Adding User Node credentials.xml file
+  #copy: 
+  #   src: "../jenkins_slave/files/credentials.xml"
+  template: 
+     src: "credentials.xml"
+     dest: "{{ jenkins_home }}/"
+     mode: 0644
+     owner: "{{ username }}"
+     group: "{{ username }}"
+

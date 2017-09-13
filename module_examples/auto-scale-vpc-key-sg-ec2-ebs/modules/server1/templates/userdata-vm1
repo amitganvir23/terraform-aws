@@ -1,0 +1,41 @@
+#adding data in user data in LC so that it will execuite on every luanch in Auto Scaling
+
+repo_update: all
+repo_upgrade: all
+
+packages:
+ - python
+ - perl
+ - ansible
+
+#Here we can put our required contents in file
+write_files:
+ - content: |
+   Hello World
+   path: /abc.txt
+
+ - content: |
+      #!/bin/sh
+      DEVICE=${disk_name}
+      fs_type=$(file -s $DEVICE | awk '{print $2}')
+      mount_point_name=${mount_data_dir}
+      # If device is file is data then it will format else it will mount your ecs disk
+      if [ "$fs_type" == "data" ]
+      then
+         echo "Creating file system on $DEVICE"
+         mkfs -t ext4 $DEVICE
+      fi
+      if [[ ! -d "$mount_point_name" ]];then
+         mkdir $mount_point_name
+      fi
+      UUID=$(file -s $${DEVICE} | awk '{print $8}')
+      echo "$UUID  $mount_point_name   ext4    defaults,nofail        0       2" >> /etc/fstab
+      mount -a
+   path: /tmp/mount_ebs.sh
+   permissions: '0755'
+
+
+runcmd:
+- mkdir ${mount_data_dir}
+- mkdir /amit
+

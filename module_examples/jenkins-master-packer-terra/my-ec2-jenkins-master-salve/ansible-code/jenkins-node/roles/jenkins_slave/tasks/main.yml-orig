@@ -1,0 +1,122 @@
+- include_vars: ../jenkins_slave/defaults/my_var.yml
+
+- name: Copying Jenkins repo
+  get_url:
+     url: http://pkg.jenkins-ci.org/redhat/jenkins.repo
+     dest: /etc/yum.repos.d/
+
+- name: Adding the repository gpg keys
+  rpm_key:
+     key: https://jenkins-ci.org/redhat/jenkins-ci.org.key
+     state: present
+
+- name: Removing Old Java_1.7 version
+  yum:
+    name: java-1.7.0
+    state: absent
+
+- name: Installing Jenkins Entered Veriosn and other packages
+  yum:
+    name: "{{item}}"
+    state: present
+    enablerepo: epel
+  with_items:
+        - git
+        - java-1.8.0
+        - ansible
+        - docker
+        - curl
+
+- name: Assigning shell to jenkins user
+  user:
+    name: jenkins
+    comment: "jenkins Slave"
+    shell: /bin/bash
+    home: "{{ jenkins_user_home }}"
+
+#- name: Copying Jenkins Skell file in jenkins users home dir
+#  shell: "cp /etc/skel/.bash* /var/lib/jenkins"
+
+- file:
+    path: "{{ jenkins_user_home }}/.ssh"
+    mode: 0700
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    state: directory
+
+- file:
+    path: "{{ jenkins_home }}"
+    mode: 0755
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    state: directory
+
+- name: Add user Public Key
+  copy: 
+     src: "../jenkins_slave/files/jenkins_id_rsa.pub"
+     dest: "{{ jenkins_user_home }}/.ssh/id_rsa.pub"
+     mode: 0644
+     owner: "{{ username }}"
+     group: "{{ username }}"
+
+- name: Add user Private Key
+  copy: 
+     src: "../jenkins_slave/files/jenkins_id_rsa"
+     dest: "{{ jenkins_user_home }}/.ssh/id_rsa"
+     mode: 0600
+     owner: "{{ username }}"
+     group: "{{ username }}"
+
+- name: Add user Private Key
+  copy:
+     src: "../jenkins_slave/files/jenkins_id_rsa.pub"
+     dest: "{{ jenkins_user_home }}/.ssh/authorized_keys"
+     mode: 0600
+     owner: "{{ username }}"
+     group: "{{ username }}"
+
+- name: Adding Bitbucket Public Key
+  copy: 
+     src: "../jenkins_slave/files/bitbucket_pub"
+     dest: "{{ jenkins_user_home }}/.ssh/known_hosts"
+     mode: 0644
+     owner: "{{ username }}"
+     group: "{{ username }}"
+
+- name: git config user name
+  shell: git config --global user.name "{{ git_name }}" executable=/bin/bash
+  become: yes
+  become_user: "{{ username }}"
+
+- name: git config user email
+  shell: git config --global user.email "{{ git_email }}" executable=/bin/bash
+  become: yes
+  become_user: "{{ username }}"
+
+
+- file:
+    path: "{{ jenkins_user_home }}/.m2"
+    mode: 0700
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    state: directory
+
+- name: Downloading maven-3.3.9 tar file
+  get_url:
+     url: http://www.eu.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz
+     dest: /tmp/
+
+- name: Extracting Mave tar file
+  shell: "tar -xvf /tmp/apache-maven-3.3.9-bin.tar.gz -C {{ jenkins_user_home }}/.m2"
+
+- name: Extracting Mave tar file
+  shell: "alternatives --install /usr/bin/mvn mvn {{ jenkins_user_home }}.m2/apache-maven-3.3.9/bin/mvn 1"
+
+- name: Downloading jdk1.8.0_131 rpm package
+  shell: "wget --no-check-certificate --no-cookies --header 'Cookie: oraclelicense=accept-securebackup-cookie' http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.rpm"
+
+- name: Installing jdk1.8.0_131 rpm packag
+  yum:
+    name: jdk-8u131-linux-x64.rpm
+    state: present
+

@@ -1,0 +1,7 @@
+---
+- hosts: tag_EC2_jenkins_master
+  gather_facts: false
+  remote_user: ec2-user
+  sudo: True
+  roles:
+        - jenkins_slave
