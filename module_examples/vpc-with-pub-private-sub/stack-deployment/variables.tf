@@ -11,7 +11,7 @@ variable "azs" {
 // VPC
 variable "region" {}
 variable "environment" {}
-/variable "aws_key_name" {}
+//variable "aws_key_name" {}
 variable "vpc_cidr" {}
 variable "vpc_name" {}
 
