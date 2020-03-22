@@ -32,3 +32,17 @@ module "kafka-vpc" {
    environment              = "${var.environment}"
 }
 
+module "kafka" {
+   source                = "../modules/kafka"
+   vpc_id                = "${module.mongo-vpc.vpc_id}"
+   region                = "${var.region}"
+   aws_key_name          = "${var.aws_key_name}"
+   vpc_cidr              = "${var.vpc_cidr}"
+   environment           = "${var.environment}"
+   kafka_image           = "${var.kafka_image}"
+   kafka_instance_type   = "${var.kafka_instance_type}"
+   kafka_instance_count  = "${var.kafka_instance_count}"
+   kafka_cluster_size    = "${var.kafka_cluster_size}"
+   kafka_image           = "${var.kafka_image}"
+   kafka_image           = "${var.kafka_image}"
+}

@@ -5,7 +5,7 @@
  */
 resource "aws_security_group" "kafka-sg" {
    name = "kafka-sg"
-   vpc_id = "${var.kafka-vpc-id}"
+   vpc_id = "${var.vpc_id}"
 
    // allows traffic from the SG itself for tcp
    ingress {

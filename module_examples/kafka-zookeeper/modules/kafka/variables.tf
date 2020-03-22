@@ -7,8 +7,8 @@ variable "pub_sub_id" {}
 variable "aws_key_name" {}
 variable "environment" {}
 
-variable "kafka-vpc-id" {}
 variable "vpc_id" {}
+variable "vpc_cidr" {}
 
 variable "aws_key_name" {}
 variable "kafka_image" {}

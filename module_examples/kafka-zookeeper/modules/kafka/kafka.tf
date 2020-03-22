@@ -5,7 +5,7 @@ resource "aws_launch_configuration" "kafka_lc" {
   key_name        = "${var.aws_key_name}"
   security_groups = ["${aws_security_group.kafka-sg.id}"]
   #user_data      = "${data.template_file.user_data_kafka.rendered}"
-  #count           = "${var.kafka_instance_count}"
+  count           = "${var.kafka_instance_count}"
   associate_public_ip_address = true
   #iam_instance_profile = "${aws_iam_instance_profile.kafka_profile.id}"
   root_block_device {
