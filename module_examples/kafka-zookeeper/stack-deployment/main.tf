@@ -21,7 +21,7 @@ provider "aws" {
 /****
 /********************************************************************************/
 
-module "kafka-vpc" {
+module "vpc" {
    source                   = "../modules/vpc"
    azs                      = "${var.azs}"
    vpc_cidr                 = "${var.vpc_cidr}"
@@ -34,7 +34,7 @@ module "kafka-vpc" {
 
 module "kafka" {
    source                = "../modules/kafka"
-   vpc_id                = "${module.mongo-vpc.vpc_id}"
+   vpc_id                = "${module.vpc.vpc_id}"
    region                = "${var.region}"
    aws_key_name          = "${var.aws_key_name}"
    vpc_cidr              = "${var.vpc_cidr}"
@@ -43,6 +43,4 @@ module "kafka" {
    kafka_instance_type   = "${var.kafka_instance_type}"
    kafka_instance_count  = "${var.kafka_instance_count}"
    kafka_cluster_size    = "${var.kafka_cluster_size}"
-   kafka_image           = "${var.kafka_image}"
-   kafka_image           = "${var.kafka_image}"
 }

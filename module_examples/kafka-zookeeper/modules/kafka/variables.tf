@@ -3,8 +3,6 @@
 */
 
 variable "region" {}
-variable "pub_sub_id" {}
-variable "aws_key_name" {}
 variable "environment" {}
 
 variable "vpc_id" {}

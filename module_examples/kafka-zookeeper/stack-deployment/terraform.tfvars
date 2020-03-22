@@ -22,7 +22,6 @@ private_sub_cidr  = ["192.168.3.0/24","192.168.4.0/24"]
 
 //##jenkins Master
 //jenkins_master_instance_type         = "t2.medium"
-//aws_key_name = "terraform-support-keys"
 //jenkins-master-ami = "ami-66d9dc06"
 
 aws_key_name = "amit-ec2"
