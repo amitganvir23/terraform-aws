@@ -32,3 +32,4 @@ variable "kafka_image" {}
 variable "kafka_instance_type" {}
 variable "kafka_instance_count" {}
 variable "kafka_cluster_size" {}
+variable "kafka_lc" {}

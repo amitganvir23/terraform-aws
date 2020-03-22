@@ -26,7 +26,8 @@ private_sub_cidr  = ["192.168.3.0/24","192.168.4.0/24"]
 
 aws_key_name = "amit-ec2"
 
+kafka_lc             = "Kafka_LC"
 kafka_image          = "ami-0e2ff28bfb72a4e45" 
-kafka_instance_type  = "t2.medium"
-kafka_instance_count = 0
+kafka_instance_type  = "t2.micro"
+kafka_instance_count = 1
 kafka_cluster_size   = 0

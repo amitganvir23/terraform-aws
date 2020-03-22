@@ -35,7 +35,10 @@ module "vpc" {
 module "kafka" {
    source                = "../modules/kafka"
    vpc_id                = "${module.vpc.vpc_id}"
+   #aws_pub_subnet_id     = "${module.vpc.aws_pub_subnet_id}"
+   aws_pub_subnet_id_str = "${module.vpc.aws_pub_subnet_id_str}"
    region                = "${var.region}"
+   azs                   = "${var.azs}"
    aws_key_name          = "${var.aws_key_name}"
    vpc_cidr              = "${var.vpc_cidr}"
    environment           = "${var.environment}"
@@ -43,4 +46,5 @@ module "kafka" {
    kafka_instance_type   = "${var.kafka_instance_type}"
    kafka_instance_count  = "${var.kafka_instance_count}"
    kafka_cluster_size    = "${var.kafka_cluster_size}"
+   kafka_lc              = "${var.kafka_lc}"
 }

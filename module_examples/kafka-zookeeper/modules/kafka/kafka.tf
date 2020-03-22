@@ -1,5 +1,5 @@
 resource "aws_launch_configuration" "kafka_lc" {
-  name            = "kafka-config"
+  name            = "${var.kafka_lc}"
   image_id        = "${var.kafka_image}"
   instance_type   = "${var.kafka_instance_type}"
   key_name        = "${var.aws_key_name}"
@@ -13,16 +13,13 @@ resource "aws_launch_configuration" "kafka_lc" {
   volume_size = 30
   delete_on_termination = true
   }
-  volume_tags = {
-    Name = "Kafka"
-  }
   lifecycle {
     create_before_destroy = true
   }
 }
 
 resource "aws_autoscaling_group" "kafka_asg" {
-  #availability_zones        = "${var.availability_zones}"
+  availability_zones        = ["${var.azs}"]
   name                      = "${var.environment}-kafka-asg"
   max_size                  = "${var.kafka_cluster_size}"
   min_size                  = "${var.kafka_cluster_size}"
@@ -30,8 +27,9 @@ resource "aws_autoscaling_group" "kafka_asg" {
   health_check_type         = "EC2"
   desired_capacity          = "${var.kafka_cluster_size}"
   force_delete              = true
-  launch_configuration      = "${aws_launch_configuration.kafka_lc.name}"
-  #vpc_zone_identifier       = ["${data.terraform_remote_state.static.subnet_ids}"]
+  launch_configuration      = "${aws_launch_configuration.kafka_lc.id}"
+  vpc_zone_identifier       = ["${var.aws_pub_subnet_id_str}"]
+  #vpc_zone_identifier       = ["subnet-0a216d381a7a3995a,subnet-056e9002d6f820152"]
 
   tags = [{
     key                 = "Name"
