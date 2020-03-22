@@ -24,3 +24,10 @@ private_sub_cidr  = ["192.168.3.0/24","192.168.4.0/24"]
 //jenkins_master_instance_type         = "t2.medium"
 //aws_key_name = "terraform-support-keys"
 //jenkins-master-ami = "ami-66d9dc06"
+
+aws_key_name = "amit-ec2"
+
+kafka_image          = "ami-0e2ff28bfb72a4e45" 
+kafka_instance_type  = "t2.medium"
+kafka_instance_count = 0
+kafka_cluster_size   = 0
