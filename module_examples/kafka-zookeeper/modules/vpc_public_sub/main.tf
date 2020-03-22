@@ -1,8 +1,7 @@
 /**********************************************
  This will deploy one vpc
-   - public subnet/private subnets based on variables
+   - public subnets based on variables
    - igw
-   - nat-gateway
    - associated route tables
 **********************************************/
 
@@ -55,63 +54,14 @@ resource "aws_subnet" "public-subnet" {
    }
 }
 
-/********************Nat-Gateway **********************/
-resource "aws_nat_gateway" "ngw" {
-    allocation_id = "${aws_eip.nat.id}"
-    subnet_id     = "${aws_subnet.public-subnet.*.id[0]}"
-    depends_on    = ["aws_internet_gateway.igw"]
-}
-
-resource "aws_eip" "nat"{
-   vpc = true
-}
-
-
-/********* Private-subnet ***************/
-
-resource "aws_subnet" "private-subnet" {
-   count             = "${length(var.private_sub_cidr)}"
-   availability_zone = "${element(var.azs,count.index)}"
-   cidr_block        = "${var.private_sub_cidr[count.index]}"
-   vpc_id            = "${aws_vpc.kafka_vpc.id}"
-   tags = {
-        Name        = "Infra-Private_Subnet-${count.index}"
-        environment = "${var.environment}"
-   }
-   depends_on = ["aws_nat_gateway.ngw"]
-}
-
-/***** Routing information private subnet ************/
-
-resource "aws_route_table" "pri_rtb" {
-   vpc_id = "${aws_vpc.kafka_vpc.id}"
-   route {
-     cidr_block = "0.0.0.0/0"
-     gateway_id ="${aws_nat_gateway.ngw.id}"
-   }
-   tags = {
-     Name        = "Infra-Private-RTB"
-     environment = "${var.environment}"
-   }
-}
-
-resource "aws_route_table_association" "a-priv-sub" {
-   count          = "${length(var.private_sub_cidr)}"
-   subnet_id      =  "${element(aws_subnet.private-subnet.*.id,count.index)}"
-   route_table_id = "${element(aws_route_table.pri_rtb.*.id,count.index)}"
-}
-
 
 resource "null_resource" "module_dependency" {
    depends_on = [
         "aws_vpc.kafka_vpc",
         "aws_subnet.public-subnet",
-        "aws_subnet.private-subnet",
         "aws_internet_gateway.igw",
         "aws_route_table.pub_rtb",
         "aws_route_table_association.a-pub-sub",
-        "aws_route_table.pri_rtb",
-        "aws_route_table_association.a-priv-sub",
         "aws_internet_gateway.igw",
         "aws_eip.nat"
    ]

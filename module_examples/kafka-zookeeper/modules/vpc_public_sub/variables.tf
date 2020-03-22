@@ -11,17 +11,10 @@ variable "dhcp_domain_name_servers" {
 
 variable "vpc_cidr" {
    description = "Sring - Vpc cidrs. Will be mapped in individual env files"
-
 }
 
 variable "public_sub_cidr" {
    description = "Cidr for public subnet"
-   default = []
-
-}
-
-variable "private_sub_cidr" {
-   description = "Cidr for private subnet"
    default = []
 }
 
