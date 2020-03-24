@@ -50,7 +50,7 @@ resource "aws_iam_role_policy" "kafka_policy" {
         "route53:ChangeResourceRecordSets"
       ],
       "Resource": "*"
-    },
+    }
   ]
 }
 EOF
