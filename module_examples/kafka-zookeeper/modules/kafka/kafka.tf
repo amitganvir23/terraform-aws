@@ -1,3 +1,11 @@
+
+resource "template_file" "user_data_kafka" {
+  template = "kafka_userdata.tpl"
+  vars {
+    region= "${var.region}"
+  }
+}
+
 resource "aws_launch_configuration" "kafka_lc" {
   name                        = "${var.kafka_lc}"
   image_id                    = "${var.kafka_image}"
@@ -5,7 +13,13 @@ resource "aws_launch_configuration" "kafka_lc" {
   key_name                    = "${var.aws_key_name}"
   security_groups             = ["${aws_security_group.kafka_sg.id}"]
   #user_data                  = "${data.template_file.user_data_kafka.rendered}"
-  user_data                   = "${file("kafka_userdata.sh")}"
+  #user_data                   = "${var.user_data_base64}"
+  #user_data                   = "${file("../modules/kafka/kafka_userdata.tpl")}"
+  user_data = <<EOF
+#!/bin/bash
+region=${var.kafka_lc}
+echo ECS_CLUSTER=${var.region} >> /tmp/config
+EOF
   count                       = "${var.kafka_instance_count}"
   iam_instance_profile        = "${aws_iam_instance_profile.kafka_profile.id}"
   associate_public_ip_address = true

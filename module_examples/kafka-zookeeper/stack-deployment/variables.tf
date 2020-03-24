@@ -36,3 +36,11 @@ variable "zookeeper_instance_type" {}
 variable "zookeeper_instance_count" {}
 variable "zookeeper_cluster_size" {}
 variable "zookeeper_lc" {}
+
+
+
+#variable "user_data_base64" {
+#  type        = string
+#  description = "The Base64-encoded user data to provide when launching the instances"
+#  default     = ""
+#}

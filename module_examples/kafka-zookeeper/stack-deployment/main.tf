@@ -32,6 +32,13 @@ module "vpc" {
    environment              = "${var.environment}"
 }
 
+#resource "template_file" "kafka" {
+#  template = "kafka_userdata.tpl"
+#  vars {
+#    region= "${var.region}"
+#  }
+#}
+
 module "kafka" {
    source                = "../modules/kafka"
    vpc_id                = "${module.vpc.vpc_id}"
@@ -47,6 +54,7 @@ module "kafka" {
    kafka_instance_count  = "${var.kafka_instance_count}"
    kafka_cluster_size    = "${var.kafka_cluster_size}"
    kafka_lc              = "${var.kafka_lc}"
+#   user_data_base64      = base64encode(local.userdata)
 }
 
 module "zookeeper" {
@@ -68,3 +76,11 @@ module "zookeeper" {
    zookeeper_profile_iam_id = "${module.kafka.kafka_profile_iam_id}"
 }
 
+locals {
+  userdata = <<-USERDATA
+    #!/bin/bash
+    echo hello
+    region="${var.region}"
+    region2=${var.region}
+  USERDATA
+}
