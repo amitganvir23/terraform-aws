@@ -19,15 +19,19 @@ environment       = "dev"
 public_sub_cidr   = ["192.168.0.0/24","192.168.1.0/24"]
 private_sub_cidr  = ["192.168.3.0/24","192.168.4.0/24"]
 
-
-//##jenkins Master
-//jenkins_master_instance_type         = "t2.medium"
-//jenkins-master-ami = "ami-66d9dc06"
-
+// AWS Key Pair //
 aws_key_name = "amit-ec2"
 
+// Kafka Variables //
 kafka_lc             = "Kafka_LC"
 kafka_image          = "ami-0e2ff28bfb72a4e45" 
 kafka_instance_type  = "t2.micro"
 kafka_instance_count = 1
 kafka_cluster_size   = 0
+
+// Kafka Variables //
+zookeeper_lc             = "Zookeeper_LC"
+zookeeper_image          = "ami-0e2ff28bfb72a4e45" 
+zookeeper_instance_type  = "t2.micro"
+zookeeper_instance_count = 1
+zookeeper_cluster_size   = 0

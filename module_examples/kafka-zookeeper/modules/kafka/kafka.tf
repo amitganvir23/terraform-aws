@@ -3,11 +3,11 @@ resource "aws_launch_configuration" "kafka_lc" {
   image_id        = "${var.kafka_image}"
   instance_type   = "${var.kafka_instance_type}"
   key_name        = "${var.aws_key_name}"
-  security_groups = ["${aws_security_group.kafka-sg.id}"]
+  security_groups = ["${aws_security_group.kafka_sg.id}"]
   #user_data      = "${data.template_file.user_data_kafka.rendered}"
   count           = "${var.kafka_instance_count}"
   associate_public_ip_address = true
-  #iam_instance_profile = "${aws_iam_instance_profile.kafka_profile.id}"
+  iam_instance_profile = "${aws_iam_instance_profile.kafka_profile.id}"
   root_block_device {
   volume_type = "gp2"
   volume_size = 30

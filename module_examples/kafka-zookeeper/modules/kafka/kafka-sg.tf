@@ -1,10 +1,10 @@
 /*
-- kafka-sg
+- kafka_sg
 - All traffic in vpc is open since we do not know what all ports we may
   have to open
  */
-resource "aws_security_group" "kafka-sg" {
-   name = "kafka-sg"
+resource "aws_security_group" "kafka_sg" {
+   name = "kafka_sg"
    vpc_id = "${var.vpc_id}"
 
    // allows traffic from the SG itself for tcp
