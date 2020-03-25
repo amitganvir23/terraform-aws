@@ -13,13 +13,8 @@ resource "aws_launch_configuration" "kafka_lc" {
   key_name                    = "${var.aws_key_name}"
   security_groups             = ["${aws_security_group.kafka_sg.id}"]
   #user_data                  = "${data.template_file.user_data_kafka.rendered}"
-  #user_data                   = "${var.user_data_base64}"
-  #user_data                   = "${file("../modules/kafka/kafka_userdata.tpl")}"
-  user_data = <<EOF
-#!/bin/bash
-region=${var.kafka_lc}
-echo ECS_CLUSTER=${var.region} >> /tmp/config
-EOF
+  #user_data                  = "${var.user_data_base64}"
+  #user_data                  = "${file("../modules/kafka/kafka_userdata.tpl")}"
   count                       = "${var.kafka_instance_count}"
   iam_instance_profile        = "${aws_iam_instance_profile.kafka_profile.id}"
   associate_public_ip_address = true
@@ -31,6 +26,34 @@ EOF
   lifecycle {
     create_before_destroy = true
   }
+  user_data = <<EOF
+#!/bin/bash
+echo 'Running startup script...'
+region="${var.region}"
+vpc_id="${var.vpc_id}"
+services="${var.kafka_service}"
+stackName="${var.environment}"
+### Route53
+zone_name="${var.zone_name}"
+rec_name="${var.rec_name}"
+#### EC2 Tags
+ec2_tag_key=StackService
+ec2_tag_kafka_value=${stackName}-${services}
+ec2_tag_zookeerp_value=${stackName}-zookeeper
+baseURL=https://raw.githubusercontent.com/amitganvir23/amazon-cloud-formation-kakfa/master/scripts
+echo 'Install aws-cli...'
+apt-get install -y awscli ansible
+echo 'Downoading raw files from git'
+wget -N ${baseURL}/setup.sh
+wget -N ${baseURL}/UpdateRoute53-yml.sh
+wget -N ${baseURL}/cloudwatch-alarms.sh
+wget -N ${baseURL}/setup-zookeepr.yml
+wget -N ${baseURL}/setup-kafka.yml
+chmod +x *.sh
+./setup.sh ${region} ${services} ${stackName}
+#./UpdateRoute53-yml.sh ${stackName} ${region} ${zone_name} ${rec_name} ${ec2_tag_key} ${ec2_tag_kafka_value} ${vpc_id} > route53.log 2>&1
+ansible-playbook -e "REGION=${region} ec2_tag_key=${ec2_tag_key} ec2_tag_value=${ec2_tag_kafka_value} ec2_tag_zookeerp_value=${ec2_tag_zookeerp_value}" setup-kafka.yml -vvv > kafka.log 2>&1
+EOF
 }
 
 resource "aws_autoscaling_group" "kafka_asg" {

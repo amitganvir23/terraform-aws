@@ -24,3 +24,10 @@ variable "zookeeper_cluster_size" {}
 variable "zookeeper_lc" {}
 variable "zookeeper_sg" {}
 variable "zookeeper_profile_iam_id" {}
+
+// Tags //
+variable "kafka_service" {}
+variable "zookeeper_service" {}
+// Route 53 //
+variable "zone_name" {}
+variable "rec_name" {}

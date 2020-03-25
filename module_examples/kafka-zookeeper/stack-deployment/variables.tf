@@ -37,7 +37,12 @@ variable "zookeeper_instance_count" {}
 variable "zookeeper_cluster_size" {}
 variable "zookeeper_lc" {}
 
-
+// Tags //
+variable "kafka_service" {}
+variable "zookeeper_service" {}
+// Route 53 //
+variable "zone_name" {}
+variable "rec_name" {}
 
 #variable "user_data_base64" {
 #  type        = string

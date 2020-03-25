@@ -54,7 +54,11 @@ module "kafka" {
    kafka_instance_count  = "${var.kafka_instance_count}"
    kafka_cluster_size    = "${var.kafka_cluster_size}"
    kafka_lc              = "${var.kafka_lc}"
-#   user_data_base64      = base64encode(local.userdata)
+   kafka_service         = "${var.kafka_service}"
+   zone_name             = "${var.zone_name}"
+   rec_name              = "${var.rec_name}"
+   zookeeper_service     = "${var.zookeeper_service}"
+#   user_data_base64     = base64encode(local.userdata)
 }
 
 module "zookeeper" {
@@ -74,6 +78,10 @@ module "zookeeper" {
    zookeeper_lc             = "${var.zookeeper_lc}"
    zookeeper_sg             = "${module.kafka.kafka_sg}"
    zookeeper_profile_iam_id = "${module.kafka.kafka_profile_iam_id}"
+   kafka_service            = "${var.kafka_service}"
+   zone_name                = "${var.zone_name}"
+   rec_name                 = "${var.rec_name}"
+   zookeeper_service        = "${var.zookeeper_service}"
 }
 
 locals {

@@ -28,10 +28,20 @@ kafka_image          = "ami-0e2ff28bfb72a4e45"
 kafka_instance_type  = "t2.micro"
 kafka_instance_count = 1
 kafka_cluster_size   = 0
+// Tags //
+kafka_service        = "kafka"
 
-// Kafka Variables //
+
+// Zookeeper Variables //
 zookeeper_lc             = "Zookeeper_LC"
 zookeeper_image          = "ami-0e2ff28bfb72a4e45" 
 zookeeper_instance_type  = "t2.micro"
 zookeeper_instance_count = 1
 zookeeper_cluster_size   = 0
+zookeeper_service        = "zookeeper"
+
+// Route 53 //
+zone_name = "glp-test4.com"
+rec_name  = kafka.glp.test4.com
+
+

@@ -21,3 +21,10 @@ variable "kafka_instance_type" {}
 variable "kafka_instance_count" {}
 variable "kafka_cluster_size" {}
 variable "kafka_lc" {}
+
+// Tags //
+variable "kafka_service" {}
+variable "zookeeper_service" {}
+// Route 53 //
+variable "zone_name" {}
+variable "rec_name" {}

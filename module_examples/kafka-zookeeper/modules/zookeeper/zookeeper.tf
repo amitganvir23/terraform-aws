@@ -17,6 +17,34 @@ resource "aws_launch_configuration" "zookeeper_lc" {
   lifecycle {
     create_before_destroy = true
   }
+  user_data = <<EOF
+#!/bin/bash
+echo 'Running startup script...'
+region="${var.region}"
+vpc_id="${var.vpc_id}"
+services="${var.kafka_service}"
+zookeeper_service_name="${var.zookeeper_service}"
+stackName="${var.environment}"
+### Route53
+zone_name="${var.zone_name}"
+rec_name="${var.rec_name}"
+#### EC2 Tags
+ec2_tag_key=StackService
+ec2_tag_kafka_value=${stackName}-${services}
+ec2_tag_zookeerp_value=${stackName}-zookeeper
+baseURL=https://raw.githubusercontent.com/amitganvir23/amazon-cloud-formation-kakfa/master/scripts
+echo 'Install aws-cli...'
+apt-get install -y awscli ansible
+echo 'Downoading raw files from git'
+wget -N ${baseURL}/setup.sh
+wget -N ${baseURL}/UpdateRoute53-yml.sh
+wget -N ${baseURL}/cloudwatch-alarms.sh
+wget -N ${baseURL}/setup-zookeepr.yml
+wget -N ${baseURL}/setup-kafka.yml
+chmod +x *.sh
+./setup.sh ${region} ${services} ${stackName} ${zookeeper_service_name}
+ansible-playbook -e \"REGION=${region} ec2_tag_key=${ec2_tag_key} ec2_tag_value=${ec2_tag_kafka_value}\" setup-zookeepr.yml -vvv > zookeeper.log 2>&1
+EOF
 }
 
 resource "aws_autoscaling_group" "zookeeper_asg" {
