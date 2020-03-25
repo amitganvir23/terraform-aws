@@ -40,25 +40,25 @@ module "vpc" {
 #}
 
 module "kafka" {
-   source                = "../modules/kafka"
-   vpc_id                = "${module.vpc.vpc_id}"
-   #aws_pub_subnet_id    = "${module.vpc.aws_pub_subnet_id}"
-   aws_pub_subnet_id_str = "${module.vpc.aws_pub_subnet_id_str}"
-   region                = "${var.region}"
-   azs                   = "${var.azs}"
-   aws_key_name          = "${var.aws_key_name}"
-   vpc_cidr              = "${var.vpc_cidr}"
-   environment           = "${var.environment}"
-   kafka_image           = "${var.kafka_image}"
-   kafka_instance_type   = "${var.kafka_instance_type}"
-   kafka_instance_count  = "${var.kafka_instance_count}"
-   kafka_cluster_size    = "${var.kafka_cluster_size}"
-   kafka_lc              = "${var.kafka_lc}"
-   kafka_service         = "${var.kafka_service}"
-   zone_name             = "${var.zone_name}"
-   rec_name              = "${var.rec_name}"
-   zookeeper_service     = "${var.zookeeper_service}"
-#   user_data_base64     = base64encode(local.userdata)
+   source                 = "../modules/kafka"
+   vpc_id                 = "${module.vpc.vpc_id}"
+   #aws_pub_subnet_id     = "${module.vpc.aws_pub_subnet_id}"
+   aws_pub_subnet_id_str  = "${module.vpc.aws_pub_subnet_id_str}"
+   region                 = "${var.region}"
+   azs                    = "${var.azs}"
+   aws_key_name           = "${var.aws_key_name}"
+   vpc_cidr               = "${var.vpc_cidr}"
+   environment            = "${var.environment}"
+   kafka_image            = "${var.kafka_image}"
+   kafka_instance_type    = "${var.kafka_instance_type}"
+   kafka_instance_count   = "${var.kafka_instance_count}"
+   kafka_cluster_size     = "${var.kafka_cluster_size}"
+   kafka_lc               = "${var.kafka_lc}"
+   kafka_service_name     = "${var.kafka_service_name}"
+   zookeeper_service_name = "${var.zookeeper_service_name}"
+   zone_name              = "${var.zone_name}"
+   rec_name               = "${var.rec_name}"
+#   user_data_base64      = base64encode(local.userdata)
 }
 
 module "zookeeper" {
@@ -78,10 +78,10 @@ module "zookeeper" {
    zookeeper_lc             = "${var.zookeeper_lc}"
    zookeeper_sg             = "${module.kafka.kafka_sg}"
    zookeeper_profile_iam_id = "${module.kafka.kafka_profile_iam_id}"
-   kafka_service            = "${var.kafka_service}"
+   kafka_service_name       = "${var.kafka_service_name}"
+   zookeeper_service_name   = "${var.zookeeper_service_name}"
    zone_name                = "${var.zone_name}"
    rec_name                 = "${var.rec_name}"
-   zookeeper_service        = "${var.zookeeper_service}"
 }
 
 locals {

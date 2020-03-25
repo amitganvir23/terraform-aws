@@ -26,8 +26,8 @@ variable "zookeeper_sg" {}
 variable "zookeeper_profile_iam_id" {}
 
 // Tags //
-variable "kafka_service" {}
-variable "zookeeper_service" {}
+variable "kafka_service_name" {}
+variable "zookeeper_service_name" {}
 // Route 53 //
 variable "zone_name" {}
 variable "rec_name" {}
