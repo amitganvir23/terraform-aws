@@ -39,7 +39,7 @@ rec_name="${var.rec_name}"
 ec2_tag_key=StackService
 ec2_tag_kafka_value="$stackName-$services"
 ec2_tag_zookeerp_value="$stackName-$zookeeper_service_name"
-baseURL="https://raw.githubusercontent.com/amitganvir23/amazon-cloud-formation-kakfa/master/scripts"
+baseURL="https://raw.githubusercontent.com/saimantham/terragrunt-infrastructure-live-example/master/scripts"
 echo 'Install aws-cli...'
 apt-get install -y awscli ansible
 echo 'Downoading raw files from git'

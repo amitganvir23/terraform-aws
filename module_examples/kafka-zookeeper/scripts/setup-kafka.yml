@@ -45,7 +45,7 @@
       - replication_factor: 1
       - partition_count: 8
       - url: http://www-us.apache.org/dist/kafka/{{ version }}/kafka_2.11-{{ version }}.tgz
-      - server_properties_url: https://raw.githubusercontent.com/amitganvir23/amazon-cloud-formation-kakfa/master/kafka-templates/server.properties
+      - server_properties_url: https://raw.githubusercontent.com/saimantham/terragrunt-infrastructure-live-example/master/scripts/server.properties 
 
   tasks:
 #--------------------------------------
@@ -54,7 +54,7 @@
    - name: sleep for 240 seconds and continue with play
      wait_for: timeout=240
   
-   - name: Create a User `"{{ user }}"` for all our Hadoop Modules.
+   - name: Create a User `"{{ user }}"`
      user: name={{ user }} password={{ password }}
 
 

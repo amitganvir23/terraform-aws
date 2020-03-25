@@ -2,7 +2,7 @@
 
 echo "Running UpdateRoute53.sh"
 stackName=$1
-#stackName=glp-test
+#stackName=sai-test
 
 yum install epel-release -y
 curl -O https://bootstrap.pypa.io/get-pip.py
@@ -26,8 +26,8 @@ region=$2
 ## Route53 zone name and record name
 zone_name=$3
 rec_name=$4
-#zone_name=glp-test.com
-#rec_name=test.glp-test.com
+#zone_name=sai-test.com
+#rec_name=test.sai-test.com
 
 ## Ec2-tag
 ec2_tag_key=$5

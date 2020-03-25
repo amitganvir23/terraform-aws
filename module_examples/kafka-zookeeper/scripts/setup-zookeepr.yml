@@ -41,13 +41,13 @@
       - data_store: /mnt/data/zookeeper
       - logging: /mnt/data/zookeeper_logging
       - url: https://www.apache.org/dist/zookeeper/zookeeper-{{ version }}/zookeeper-{{ version }}.tar.gz
-      - log4j_properties_url: https://raw.githubusercontent.com/amitganvir23/amazon-cloud-formation-kakfa/master/zookeeper-templates/log4j.properties
+      - log4j_properties_url: https://raw.githubusercontent.com/saimantham/terragrunt-infrastructure-live-example/master/scripts/log4j.properties 
 
   tasks:
    - name: sleep for 60 seconds and continue with play
      wait_for: timeout=60
    
-   - name: Create a User `"{{ user }}"` for all our Hadoop Modules.
+   - name: Create a User `"{{ user }}"` 
      user: name={{ user }} password={{ password }}
 
    - name: Collecting Private IP address

@@ -20,7 +20,7 @@ public_sub_cidr   = ["192.168.0.0/24","192.168.1.0/24"]
 private_sub_cidr  = ["192.168.3.0/24","192.168.4.0/24"]
 
 // AWS Key Pair //
-aws_key_name = "amit-ec2"
+aws_key_name = "sai-key.pem"
 
 // Kafka Variables //
 kafka_lc             = "Kafka_LC"
@@ -41,7 +41,7 @@ zookeeper_cluster_size   = 1
 zookeeper_service_name   = "zookeeper"
 
 // Route 53 //
-zone_name = "glp-test4.com"
-rec_name  = "kafka.glp.test4.com"
+zone_name = "sai-test4.com"
+rec_name  = "kafka.sai.test4.com"
 
 
